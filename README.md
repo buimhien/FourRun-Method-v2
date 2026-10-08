@@ -8,7 +8,7 @@ Single-Plane Rigid Rotor Balancing: Monte Carlo Analysis and Three Application C
 
 | Path | What it is |
 |---|---|
-| `index.html` | Web tool v3.0 (Digital Balancing Assistant, served at https://buimhien.github.io/Four-run-Method/); all computations are done by `js/fourrun.js` |
+| `index.html` | Web tool v2.0 (Digital Balancing Assistant, served at https://buimhien.github.io/Four-run-Method/); all computations are done by `js/fourrun.js` |
 | `fourrun/` | Python package: estimators (Eqs. 3–6), closure residual and z test (Eqs. 10–12) with known or pooled noise estimate, screening decision incl. 'not assessable', predicted uncertainty (Eq. 13), graphical solution (Section 4.5) |
 | `js/fourrun.js` | JavaScript module with the same functions, the computational core of the web tool |
 | `data/cases.json` | Published mean amplitudes and machine data of the three application cases |
