@@ -1,6 +1,6 @@
 # Changelog
 
-## v3.0
+## v2.0
 
 Web tool (`index.html`)
 - All computations moved to `js/fourrun.js`, the JavaScript reference implementation that agrees with the Python package `fourrun` to within 1e-9 (`tests/parity.py`).
