@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated paper."
+title: "Four-run Method: reference implementation for phase-free single-plane rotor balancing"
+version: 3.0.0
+license: MIT
+authors:
+  - family-names: Bui
+    given-names: Minh-Hien
+  - family-names: Dinh
+    given-names: Duc-Hanh
+  - family-names: Dang
+    given-names: Phuoc-Vinh
+repository-code: "https://github.com/buimhien/Four-run-Method"
+url: "https://buimhien.github.io/Four-run-Method/"

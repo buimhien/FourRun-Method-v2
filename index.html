@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Single-Plane Rotor Balancing — Four-Run Method</title>
+<meta name="description" content="Phase-free single-plane Four-run balancing: analytical and graphical solutions, closure check and predicted uncertainty (v3.0).">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #102a4c;
+  --navy2:   #1a3d6e;
+  --navy3:   #2452a0;
+  --sky:     #e8f1fb;
+  --sky2:    #d2e4f6;
+  --sky3:    #bbceeb;
+  --ivory:   #fafcff;
+  --card:    #ffffff;
+  --red:     #b91c1c;
+  --red2:    #dc2626;
+  --gold:    #b45309;
+  --gold2:   #d97706;
+  --teal:    #0f766e;
+  --teal2:   #0d9488;
+  --slate:   #334155;
+  --slate2:  #475569;
+  --slate3:  #64748b;
+  --muted:   #94a3b8;
+  --border:  #cbd5e1;
+  --border2: #e2e8f0;
+  --text:    #0f172a;
+  --mono:  'JetBrains Mono', 'Fira Mono', monospace;
+  --serif: 'Crimson Pro', 'Georgia', serif;
+  --cond:  'Barlow Condensed', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body {
+  min-height: 100vh; height: 100vh;
+  display: flex; flex-direction: column;
+  background: var(--sky);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 13px;
+  overflow: hidden;
+}
+
+header {
+  flex-shrink: 0;
+  background: var(--navy);
+  border-bottom: 3px solid var(--gold2);
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+}
+.hdr-accent {
+  width: 5px;
+  background: linear-gradient(180deg, var(--gold2) 0%, var(--red2) 100%);
+  flex-shrink: 0;
+}
+.hdr-body {
+  flex: 1;
+  padding: 7px 14px 6px;
+}
+.hdr-title {
+  font-family: var(--cond);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #ffffff;
+  line-height: 1.2;
+}
+.hdr-subtitle {
+  font-family: var(--mono);
+  font-size: .62rem;
+  color: #93b4d8;
+  letter-spacing: .10em;
+  margin-top: 2px;
+}
+.hdr-meta {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 14px;
+}
+.hdr-badge {
+  font-family: var(--mono); font-size: .62rem;
+  color: #5eead4; border: 1px solid rgba(94,234,212,.4);
+  border-radius: 3px; padding: 2px 7px; letter-spacing: .08em;
+  background: rgba(94,234,212,.08);
+}
+
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 280px minmax(220px, 0.75fr) minmax(440px, 2.2fr);
+  gap: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.col {
+  display: flex; flex-direction: column;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  min-height: 0;
+}
+.col:last-child { border-right: none; }
+
+.col-head {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 7px;
+  background: var(--ivory);
+  border-bottom: 1px solid var(--border);
+  padding: 5px 10px;
+}
+.col-marker {
+  width: 4px; height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.col-title {
+  font-family: var(--cond);
+  font-size: .86rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--navy);
+}
+.col-tag {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: .58rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+}
+
+.col-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 9px 10px;
+  font-size: .84rem;
+}
+
+/* Input fields */
+.sec {
+  font-family: var(--mono);
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--slate2);
+  margin: 8px 0 5px;
+  letter-spacing: .05em;
+}
+.field {
+  margin-bottom: 7px;
+}
+.flbl {
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: var(--slate3);
+  margin-bottom: 2px;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+.fsym {
+  font-weight: 600;
+  color: var(--navy);
+}
+.funit {
+  color: var(--muted);
+  font-size: .68rem;
+  margin-left: auto;
+}
+.field input, .field select {
+  width: 100%;
+  padding: 5px 7px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: .80rem;
+  color: var(--text);
+  background: white;
+  transition: border-color 0.15s;
+}
+.field input:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 2px rgba(15,118,110,0.1);
+}
+.field input[readonly] {
+  background: #f8fafc;
+  color: var(--slate2);
+}
+
+.dir-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+.dir-btn {
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: white;
+  font-family: var(--mono);
+  font-size: .76rem;
+  color: var(--slate2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.dir-btn.active {
+  background: var(--teal);
+  color: white;
+  border-color: var(--teal);
+  font-weight: 600;
+}
+.dir-btn:hover:not(.active) {
+  background: var(--sky);
+}
+.dir-note {
+  font-family: var(--mono);
+  font-size: .64rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 3px;
+}
+
+.divider { height: 1px; background: var(--border2); margin: 7px 0; }
+
+.calc-btn {
+  width: 100%; padding: 7px;
+  background: var(--navy); border: 1px solid var(--navy2);
+  border-radius: 4px; color: #fff;
+  font-family: var(--cond); font-size: .84rem; font-weight: 700;
+  letter-spacing: .08em; cursor: pointer; transition: all .15s; margin-top: 4px;
+}
+.calc-btn:hover { background: var(--navy2); transform: translateY(-1px); }
+.calc-btn:active { transform: scale(.99); }
+.calc-btn.report { background: var(--gold); border-color: var(--gold); }
+.calc-btn.report:hover { background: var(--gold2); }
+
+/* Result hero */
+.res-hero {
+  background: linear-gradient(135deg, #fff7ed, #fffbeb);
+  border: 1px solid #fcd34d; border-left: 3px solid var(--gold2);
+  border-radius: 5px; padding: 9px 10px; margin-bottom: 7px;
+}
+.res-hero-label {
+  font-family: var(--mono); font-size: .64rem; font-weight: 600;
+  color: var(--gold); letter-spacing: .10em; text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.res-row { display: flex; align-items: baseline; gap: 4px; margin-bottom: 3px; }
+.rk { font-family: var(--mono); font-size: .70rem; color: var(--slate3); min-width: 32px; }
+.rv { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--red); line-height: 1; }
+.ru { font-family: var(--mono); font-size: .66rem; color: var(--muted); }
+.rv.teal { color: var(--teal); }
+
+.alert {
+  border-radius: 4px; padding: 6px 8px; margin-bottom: 6px;
+  font-family: var(--serif); font-size: .82rem; line-height: 1.5;
+}
+.alert.warn {
+  background: #fffbeb; border: 1px solid #fcd34d; border-left: 3px solid var(--gold2);
+  color: #78350f;
+}
+.alert.err {
+  background: #fef2f2; border: 1px solid #fca5a5; border-left: 3px solid var(--red2);
+  color: #7f1d1d;
+}
+.alert strong { display: block; font-family: var(--mono); font-size: .72rem; font-weight: 600; margin-bottom: 2px; }
+.alert.ok {
+  background: #f0fdfa; border: 1px solid #99f6e4; border-left: 3px solid var(--teal2);
+  color: #134e4a;
+}
+.alert.info {
+  background: #f8fafc; border: 1px solid var(--border); border-left: 3px solid var(--slate3);
+  color: var(--slate);
+}
+.hint {
+  font-family: var(--serif); font-size: .74rem; color: var(--slate3);
+  line-height: 1.35; margin: -2px 0 6px;
+}
+.chk {
+  border: 1px solid var(--border); border-radius: 5px; padding: 7px 9px; margin-bottom: 7px;
+  background: var(--ivory);
+}
+.chk-title {
+  font-family: var(--mono); font-size: .64rem; font-weight: 600; letter-spacing: .10em;
+  color: var(--navy3); text-transform: uppercase; margin-bottom: 4px;
+}
+.kv { display: flex; justify-content: space-between; gap: 8px;
+  font-family: var(--mono); font-size: .70rem; color: var(--slate); padding: 1px 0; }
+.kv span:last-child { font-weight: 600; text-align: right; }
+.placeholder {
+  text-align: center; padding: 18px 10px;
+  color: var(--muted); font-family: var(--serif); font-style: italic; font-size: .82rem;
+}
+
+/* Graphical panel */
+.gfx-wrap {
+  flex: 1; display: flex; flex-direction: column; padding: 7px; gap: 5px; min-height: 0;
+}
+.results-strip {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; flex-shrink: 0;
+}
+.res-card {
+  background: var(--card); border: 1px solid var(--border2); border-radius: 4px;
+  padding: 5px 7px;
+}
+.rc-lbl {
+  font-family: var(--mono); font-size: .62rem; font-weight: 600; color: var(--muted);
+  letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2px;
+}
+.rc-val { font-family: var(--mono); font-size: 1.1rem; font-weight: 600; color: var(--teal); }
+.rc-unit { font-family: var(--mono); font-size: .65rem; color: var(--muted); margin-left: 2px; }
+
+.canvas-wrap { flex: 1; position: relative; min-height: 0; display: flex; }
+#cvs {
+  flex: 1; display: block; width: 100%;
+  border-radius: 5px; border: 1px solid var(--sky3); background: #f4f8ff;
+  cursor: crosshair;
+}
+
+.legend-row {
+  display: flex; flex-wrap: wrap; gap: 3px 8px; flex-shrink: 0; align-items: center;
+}
+.leg {
+  display: flex; align-items: center; gap: 3px;
+  font-family: var(--mono); font-size: .65rem; color: var(--slate3);
+}
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; border: 2px solid; flex-shrink: 0; }
+
+#cvs-tooltip {
+  position: absolute; background: rgba(240,246,255,.96);
+  border: 1px solid rgba(30,80,160,.35); border-radius: 3px;
+  padding: 4px 7px; font-family: var(--mono); font-size: .70rem;
+  color: #1e3a5f; pointer-events: none; display: none; z-index: 30; white-space: nowrap;
+}
+
+/* Comparison section */
+.cmp-section {
+  flex-shrink: 0; background: var(--card);
+  border: 1px solid var(--border2); border-radius: 5px;
+  overflow: hidden;
+}
+.cmp-head {
+  background: var(--navy); padding: 4px 9px;
+  display: flex; align-items: center; gap: 5px;
+}
+.cmp-head-title {
+  font-family: var(--cond); font-size: .82rem; font-weight: 700;
+  color: #c9def5; letter-spacing: .08em;
+}
+.cmp-badge {
+  margin-left: auto; font-family: var(--mono); font-size: .60rem;
+  padding: 2px 6px; border-radius: 3px;
+}
+.cmp-badge.good { background: rgba(13,148,136,.2); color: #5eead4; border: 1px solid rgba(13,148,136,.4); }
+.cmp-badge.bad  { background: rgba(185,28,28,.2);  color: #fca5a5;  border: 1px solid rgba(185,28,28,.4); }
+
+.cmp-table {
+  width: 100%; border-collapse: collapse;
+  font-family: var(--mono); font-size: .72rem;
+}
+.cmp-table th {
+  background: var(--navy); color: #c9def5;
+  font-weight: 600; letter-spacing: .06em; font-size: .65rem;
+  padding: 5px 7px; text-align: left; border: none;
+}
+.cmp-table td {
+  padding: 5px 7px; border-bottom: 1px solid var(--border2);
+  color: var(--text3); vertical-align: middle;
+}
+.cmp-table tr:last-child td { border-bottom: none; }
+.cmp-table tr:hover td { background: var(--sky); }
+.val-a { color: var(--gold); font-weight: 600; }
+.val-g { color: var(--teal); font-weight: 600; }
+.val-d { font-size: .60rem; }
+.agree { color: var(--teal); font-weight: 700; }
+.disagree { color: var(--red2); font-weight: 700; }
+
+footer {
+  flex-shrink: 0; background: var(--navy);
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 3px 14px;
+  display: flex; align-items: center; gap: 7px;
+}
+.ft-main {
+  font-family: var(--mono); font-size: .62rem; color: #4a6d96; letter-spacing: .03em;
+}
+.ft-main span { color: #7ea8cc; }
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(15,23,42,0.85);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+.modal-overlay.active { display: flex; }
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  max-width: 750px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  margin: auto;
+}
+
+.modal-header {
+  background: var(--navy);
+  color: white;
+  padding: 16px 20px;
+  border-bottom: 3px solid var(--gold2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-title {
+  font-family: var(--cond);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.modal-close:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.modal-body {
+  padding: 18px;
+}
+
+.report-section {
+  margin-bottom: 16px;
+  page-break-inside: avoid;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .workspace {
+    grid-template-columns: 260px minmax(200px, 0.75fr) minmax(420px, 2.2fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  body { height: auto; overflow-y: auto; }
+  .workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    overflow: visible;
+  }
+  .col { border-right: none; border-bottom: 1px solid var(--border); min-height: 350px; }
+  .col:last-child { border-bottom: none; }
+}
+
+@media (max-width: 768px) {
+  .hdr-title { font-size: .98rem; }
+  .hdr-subtitle { font-size: .56rem; }
+  body { font-size: 12px; }
+  .results-strip { grid-template-columns: 1fr; }
+}
+
+/* Print */
+@media print {
+  body { background: white; height: auto; overflow: visible; }
+  .workspace, footer { display: none !important; }
+  .modal-overlay { position: static !important; display: block !important; background: white !important; }
+  .modal-content { box-shadow: none !important; max-width: 100% !important; max-height: none !important; }
+  .no-print { display: none !important; }
+  .report-section { page-break-inside: avoid; }
+  @page { margin: 0.5in; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-accent"></div>
+  <div class="hdr-body">
+    <div class="hdr-title">SINGLE-PLANE ROTOR BALANCING — ANALYTICAL &amp; GRAPHICAL SOLUTION</div>
+    <div class="hdr-subtitle">FOUR-RUN METHOD WITHOUT PHASE MEASUREMENT — COMPUTATIONAL VERIFICATION TOOL</div>
+  </div>
+  <div class="hdr-meta">
+    <div class="hdr-badge">v3.0</div>
+  </div>
+</header>
+
+<div class="workspace">
+
+  <!-- COL 1: INPUT -->
+  <div class="col">
+    <div class="col-head">
+      <div class="col-marker" style="background:var(--navy3)"></div>
+      <span class="col-title">MEASUREMENT INPUT</span>
+      <span class="col-tag">PARAMS</span>
+    </div>
+    <div class="col-body">
+
+      <div class="sec">▸ Equipment Information</div>
+      <div class="field">
+        <div class="flbl">Equipment</div>
+        <input type="text" id="eqName" value="Dynamic balancing test rig (BRT)">
+      </div>
+      <div class="field">
+        <div class="flbl">Mass <span class="funit">kg</span></div>
+        <input type="number" id="rotorMass" value="2" step="any">
+      </div>
+      <div class="field">
+        <div class="flbl">Diameter <span class="funit">mm</span></div>
+        <input type="number" id="rotorDiameter" value="200" step="any">
+      </div>
+      <div class="field">
+        <div class="flbl">Speed <span class="funit">rpm</span></div>
+        <input type="number" id="speed" value="2950" step="any">
+      </div>
+      <div class="field">
+        <div class="flbl">Foundation</div>
+        <input type="text" id="foundation" value="Rigid" readonly>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sec">▸ Baseline + Trial Mass</div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">A₀</span> Initial <span class="funit">mm/s</span></div>
+        <input type="text" inputmode="decimal" id="v0" value="6.8">
+      </div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">mₜ</span> Trial <span class="funit">g</span></div>
+        <input type="number" id="mt" value="0.5" step="any">
+      </div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">r<sub>t</sub></span> Trial-weight radius <span class="funit">mm</span></div>
+        <input type="number" id="rt" value="90" step="any">
+      </div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">r<sub>c</sub></span> Correction radius <span class="funit">mm</span></div>
+        <input type="number" id="rc" value="90" step="any">
+      </div>
+
+      <div class="divider"></div>
+      <div class="sec">▸ Direction</div>
+      <div class="field">
+        <div class="dir-row">
+          <button class="dir-btn active" id="btnCCW" onclick="setDir('CCW')">↺ CCW</button>
+          <button class="dir-btn" id="btnCW" onclick="setDir('CW')">↻ CW</button>
+        </div>
+        <div class="dir-note" id="dirNote">0° → 120° → 240° CCW</div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sec">▸ Three Trial Runs</div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">A₁</span> at 0° <span class="funit">mm/s</span></div>
+        <input type="text" inputmode="decimal" id="v1" value="8.7">
+      </div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">A₂</span> at 120° <span class="funit">mm/s</span></div>
+        <input type="text" inputmode="decimal" id="v2" value="9.6">
+      </div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">A₃</span> at 240° <span class="funit">mm/s</span></div>
+        <input type="text" inputmode="decimal" id="v3" value="3.2">
+      </div>
+
+      <div class="hint">Each run field takes one averaged value, or k ≥ 2 individual readings separated by commas or spaces (the same k for all four runs).</div>
+
+      <div class="divider"></div>
+      <div class="sec">▸ Measurement Noise</div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">σ<sub>dev</sub></span> Noise of one reading <span class="funit">mm/s</span></div>
+        <input type="number" id="sdev" value="0.10" step="any" min="0">
+      </div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">k</span> Readings averaged per run</div>
+        <input type="number" id="kread" value="3" step="1" min="1">
+      </div>
+      <div class="hint">Used when single values are entered: σ = σ<sub>dev</sub>/√k is applied to the averaged values. When k ≥ 2 readings are entered for every run, σ is estimated from them (ν = 4(k − 1)) and these two fields are ignored.</div>
+
+      <div class="divider"></div>
+      <div class="sec">▸ After Balancing</div>
+      <div class="field">
+        <div class="flbl"><span class="fsym">A<sub>final</sub></span> Measured <span class="funit">mm/s</span></div>
+        <input type="number" id="vFinal" value="0.74" step="any" placeholder="After correction">
+      </div>
+
+      <div id="inp-warns"></div>
+
+      <button class="calc-btn" onclick="compute()">▶ COMPUTE</button>
+      <button class="calc-btn report" onclick="generateReport()">📋 REPORT</button>
+
+    </div>
+  </div>
+
+  <!-- COL 2: ANALYTICAL -->
+  <div class="col">
+    <div class="col-head">
+      <div class="col-marker" style="background:var(--gold2)"></div>
+      <span class="col-title">ANALYTICAL</span>
+      <span class="col-tag">SOLUTION</span>
+    </div>
+    <div class="col-body" id="analBody">
+      <div class="placeholder">Enter data and<br><strong>COMPUTE</strong></div>
+    </div>
+  </div>
+
+  <!-- COL 3: GRAPHICAL -->
+  <div class="col" style="background:var(--ivory)">
+    <div class="col-head">
+      <div class="col-marker" style="background:var(--teal2)"></div>
+      <span class="col-title">GRAPHICAL</span>
+      <span class="col-tag">DIAGRAM</span>
+    </div>
+    <div class="gfx-wrap">
+
+      <div class="results-strip" id="gfxCards" style="display:none">
+        <div class="res-card">
+          <div class="rc-lbl">Mass mₒ</div>
+          <span class="rc-val" id="gc-m">—</span><span class="rc-unit">g</span>
+        </div>
+        <div class="res-card">
+          <div class="rc-lbl">Angle θ</div>
+          <span class="rc-val" id="gc-a">—</span><span class="rc-unit" id="gc-au">°</span>
+        </div>
+        <div class="res-card">
+          <div class="rc-lbl">Effect T</div>
+          <span class="rc-val" id="gc-t">—</span><span class="rc-unit">mm/s</span>
+        </div>
+      </div>
+
+      <div id="gfxWarns"></div>
+
+      <div class="canvas-wrap">
+        <canvas id="cvs"></canvas>
+        <div id="cvs-tooltip"></div>
+      </div>
+
+      <div class="legend-row">
+        <div class="leg"><div class="leg-dot" style="border-color:#2563eb"></div>A₀</div>
+        <div class="leg"><div class="leg-dot" style="border-color:#dc2626"></div>A₁</div>
+        <div class="leg"><div class="leg-dot" style="border-color:#16a34a"></div>A₂</div>
+        <div class="leg"><div class="leg-dot" style="border-color:#ea580c"></div>A₃</div>
+        <div class="leg"><div class="leg-dot" style="border-color:#92400e;background:rgba(146,64,14,.2)"></div>P</div>
+      </div>
+
+      <div class="cmp-section" id="cmpSection" style="display:none">
+        <div class="cmp-head">
+          <span class="cmp-head-title">COMPARISON</span>
+          <div class="cmp-badge good" id="cmpBadge">...</div>
+        </div>
+        <table class="cmp-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Analytical</th>
+              <th>Graphical</th>
+              <th>|Δ|</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="cmpBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="reportModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">ROTOR BALANCING REPORT</div>
+      <button class="modal-close no-print" onclick="closeReport()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:9px;margin-bottom:16px;" class="no-print">
+        <button class="calc-btn" onclick="window.print()" style="flex:1;background:var(--teal);border-color:var(--teal);">PRINT / PDF</button>
+        <button class="calc-btn" onclick="closeReport()" style="flex:1;background:var(--slate);border-color:var(--slate);">CLOSE</button>
+      </div>
+      <div id="reportContent"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-main">
+    Copyright © <span>Dr. BUI Minh-Hien</span> | <span>University of Science and Technology — The University of Danang, Vietnam</span>
+  </div>
+</footer>
+
+<script src="js/fourrun.js"></script>
+<script>
+/* Digital Balancing Assistant v3.0
+   All computations are delegated to js/fourrun.js (the reference
+   implementation of the paper); this script handles input, display and
+   drawing only. */
+const DEG = Math.PI/180, R2D = 180/Math.PI;
+const fmt = (x,d=3) => Number.isFinite(x) ? x.toFixed(d) : '—';
+const mod360 = x => ((x % 360) + 360) % 360;
+const FR = window.FourRun;
+const VERSION = '3.0';
+const MIN_V_FACTOR = 5;           // amplitude condition: all V_i >= 5 sigma
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+let DIR = 'CCW';
+function setDir(d) {
+  DIR = d;
+  document.getElementById('btnCCW').classList.toggle('active', d==='CCW');
+  document.getElementById('btnCW').classList.toggle('active', d==='CW');
+  document.getElementById('dirNote').textContent =
+    d==='CCW' ? '0° → 120° → 240° CCW' : '0° → 120° → 240° CW';
+}
+
+/* fourrun.js works in the frame of the trial-weight sequence (positions at
+   0°, 120°, 240° in the direction in which they were stepped). Angles are
+   reported in that direction; only the drawing is mirrored for CW. */
+function trialRad(i, dir) {
+  const a = i * 120;
+  return (dir === 'CCW' ? a : -a) * DEG;
+}
+const toDraw = (p, dir) => dir === 'CCW' ? {x: p[0], y: p[1]} : {x: p[0], y: -p[1]};
+
+let STATE = null;
+
+/* ---------- input ---------- */
+function parseRun(id) {
+  const s = document.getElementById(id).value.trim();
+  if (!s) return [];
+  return s.split(/[\s,;]+/).filter(Boolean).map(Number);
+}
+
+function readNoise(runs) {
+  const ks = runs.map(r => r.length);
+  if (ks.every(k => k === 1)) {
+    const V = runs.map(r => r[0]);
+    const sdev = parseFloat(document.getElementById('sdev').value);
+    const k = parseInt(document.getElementById('kread').value, 10);
+    if (!(sdev > 0) || !(k >= 1)) return {mode: 'none', sigma: NaN, nu: null, V};
+    return {mode: 'assumed', sigma: sdev / Math.sqrt(k), nu: null, sdev, k, V};
+  }
+  if (ks.every(k => k === ks[0]) && ks[0] >= 2) {
+    const p = FR.pooledSigma(runs);
+    return {mode: 'estimated', sigma: p.sigmaMean, nu: p.nu, k: ks[0], V: p.means};
+  }
+  return {error: 'Enter either one value per run, or the same number k ≥ 2 of readings for every run.'};
+}
+
+/* ---------- computation (fourrun.js) ---------- */
+function analyticalSolve(V, mt, rt, rc) {
+  const [V0, V1, V2, V3] = V;
+  const c = FR.correction(V0, V1, V2, V3, mt, rt, rc, 'xy');
+  const ok = c.status !== FR.STATUS.TXY_TOO_SMALL && c.status !== FR.STATUS.V0_INVALID
+             && Number.isFinite(c.m);
+  return {ok, status: c.status, T_xy: c.Txy, T_sum: c.Tsum, T2_sum: c.T2sum,
+          rho: c.rho, g: c.g, mc: c.m, θ_d: c.theta};
+}
+
+function ccxPts(x1,y1,r1, x2,y2,r2) {
+  const dx=x2-x1, dy=y2-y1, d=Math.hypot(dx,dy), ε=1e-9;
+  if (d<ε || d>r1+r2+ε || d<Math.abs(r1-r2)-ε) return [];
+  const a=(r1*r1-r2*r2+d*d)/(2*d);
+  const h=Math.sqrt(Math.max(0, r1*r1-a*a));
+  const mx=x1+a*dx/d, my=y1+a*dy/d;
+  if (h<ε) return [{x:mx,y:my}];
+  return [{x:mx+h*dy/d, y:my-h*dx/d}, {x:mx-h*dy/d, y:my+h*dx/d}];
+}
+
+function graphicalSolve(V, mt, rt, rc, dir) {
+  const [V0, V1, V2, V3] = V;
+  const G = FR.graphicalSolve(V0, V1, V2, V3, mt, rt, rc);
+  const cen = [0,1,2].map(i => ({x: V0*Math.cos(trialRad(i,dir)), y: V0*Math.sin(trialRad(i,dir))}));
+  const rad = [V1, V2, V3];
+  const PAIRS = [[0,1,2],[0,2,1],[1,2,0]];          // same order as fourrun.js
+  const bestPerPair = G.points.map(p => toDraw(p, dir));
+  const pairData = PAIRS.map(([i,j,k], n) => {
+    const inter = FR.pairIntersects(V0, rad[i], rad[j]);
+    const b = bestPerPair[n];
+    b.residual = Math.abs(Math.hypot(b.x-cen[k].x, b.y-cen[k].y) - rad[k]);
+    b.inter = inter;
+    return {i, j, k, inter, pts: ccxPts(cen[i].x,cen[i].y,rad[i], cen[j].x,cen[j].y,rad[j])};
+  });
+  const ok = Number.isFinite(G.T) && G.T > 1e-9;
+  const nInt = G.nIntersecting;
+  let qualityWarn = null;
+  if (nInt < 3) {
+    const n = 3 - nInt;
+    qualityWarn = {cls: nInt === 0 ? 'err' : 'warn',
+      title: `${nInt}/3 circle pairs intersect`,
+      msg: `${n} pair${n>1?'s do':' does'} not intersect; the foot of the radical axis is used for ${n>1?'these pairs':'that pair'}. See the closure check.`};
+  }
+  return {ok, T: G.T, θ_d: G.theta, mc: G.m, spread: G.spread, nPairsIntersect: nInt,
+          cen, rad, pairData, bestPerPair, solPt: toDraw(G.P, dir),
+          intersectCase: `${nInt}/3 PAIRS INTERSECT (spread=${fmt(G.spread,3)} mm/s)`, qualityWarn};
+}
+
+function closureCheck(V, noise) {
+  if (noise.mode === 'none' || !(noise.sigma > 0)) return {decision: 'no noise'};
+  const [V0, V1, V2, V3] = V;
+  const s = FR.screen(V0, V1, V2, V3, noise.sigma, noise.nu, MIN_V_FACTOR);
+  s.minV = Math.min(V0, V1, V2, V3);
+  s.limitV = MIN_V_FACTOR * noise.sigma;
+  return s;
+}
+
+function mkAlert(w) {
+  return `<div class="alert ${w.cls}"><strong>${w.title}</strong>${w.msg}</div>`;
+}
+
+function compute() {
+  const runs = ['v0','v1','v2','v3'].map(parseRun);
+  const mt = parseFloat(document.getElementById('mt').value);
+  let rt = parseFloat(document.getElementById('rt').value);
+  let rc = parseFloat(document.getElementById('rc').value);
+  const warns = [];
+
+  const bad = runs.some(r => !r.length || r.some(v => !Number.isFinite(v) || v <= 0)) || !(mt > 0);
+  if (bad) {
+    document.getElementById('analBody').innerHTML =
+      mkAlert({cls:'err', title:'Invalid input', msg:'All amplitudes and the trial mass must be positive numbers.'});
+    return;
+  }
+  const noise = readNoise(runs);
+  if (noise.error) {
+    document.getElementById('analBody').innerHTML = mkAlert({cls:'err', title:'Readings', msg: noise.error});
+    return;
+  }
+  if (!(rt > 0 && rc > 0)) {
+    rt = 1; rc = 1;
+    warns.push({cls:'warn', title:'Radii not given', msg:'The correction mass is given for the trial-weight radius.'});
+  }
+  document.getElementById('inp-warns').innerHTML = warns.map(mkAlert).join('');
+
+  const V = noise.V;
+  const aRes = analyticalSolve(V, mt, rt, rc);
+  const gRes = graphicalSolve(V, mt, rt, rc, DIR);
+  const chk = aRes.ok ? closureCheck(V, noise) : {decision: 'not computable'};
+
+  STATE = {A0:V[0], A1:V[1], A2:V[2], A3:V[3], V, mt, rt, rc, noise, aRes, gRes, chk};
+
+  renderAnalytical(aRes, chk, noise);
+  renderGraphical(gRes, aRes);
+}
+
+/* ---------- display ---------- */
+function decisionAlert(chk, noise) {
+  const lim = noise.nu == null ? '2' : `t<sub>0.975,${noise.nu}</sub> = ${fmt(chk.crit,3)}`;
+  switch (chk.decision) {
+    case 'no inconsistency detected':
+      return mkAlert({cls:'ok', title:'No inconsistency detected',
+        msg:`|z| ≤ ${lim} and all amplitudes ≥ ${MIN_V_FACTOR}σ. This does not prove that the data are free of error.`});
+    case 'flagged':
+      return mkAlert({cls:'err', title:'Flagged',
+        msg:`|z| > ${lim}: the four amplitudes are not consistent with the single-plane model at this noise level. Check the machine state, sensor mounting and trial-weight positions, and repeat the runs.`});
+    case 'not assessable':
+      return Number.isFinite(chk.z)
+        ? mkAlert({cls:'warn', title:'Not assessable',
+            msg:`No inconsistency was detected, but the smallest amplitude (${fmt(chk.minV,2)} mm/s) is below ${MIN_V_FACTOR}σ = ${fmt(chk.limitV,2)} mm/s, where the check has little power. Change the trial-weight size or position, or reduce the noise.`})
+        : mkAlert({cls:'warn', title:'Not assessable', msg:'The closure residual has zero predicted spread for these data.'});
+    case 'no noise':
+      return mkAlert({cls:'info', title:'Closure check not run',
+        msg:'Enter σ<sub>dev</sub> and k, or k ≥ 2 readings per run, to obtain z and the predicted uncertainty.'});
+    default:
+      return mkAlert({cls:'err', title:'Not computable', msg:'T<sub>xy</sub> ≈ 0 or V<sub>0</sub> ≤ 0.'});
+  }
+}
+
+function renderAnalytical(r, chk, noise) {
+  if (!r.ok) {
+    document.getElementById('analBody').innerHTML =
+      mkAlert({cls:'err', title:'Not computable', msg:'T<sub>xy</sub> ≈ 0 or V<sub>0</sub> ≤ 0: no correction can be computed from these amplitudes.'});
+    return;
+  }
+  let html = '';
+  if (r.status === FR.STATUS.T2SUM_NEGATIVE) {
+    html += mkAlert({cls:'warn', title:'T²sum < 0',
+      msg:'T<sub>sum</sub> and ρ are undefined. The correction uses T<sub>xy</sub>; the closure check still applies.'});
+  }
+  const rhoTxt = r.status === FR.STATUS.T2SUM_NEGATIVE ? 'undefined' : fmt(r.rho,3);
+
+  html += `
+    <div class="res-hero">
+      <div class="res-hero-label">★ CORRECTION</div>
+      <div class="res-row"><span class="rk">m<sub>c</sub></span><span class="rv">${fmt(r.mc,4)}</span><span class="ru">g</span></div>
+      <div class="res-row"><span class="rk">θ</span><span class="rv">${fmt(r.θ_d,2)}</span><span class="ru">°</span></div>
+      <div style="margin-top:6px;padding-top:6px;border-top:1px solid #fcd34d;">
+        <div class="kv"><span>T<sub>xy</sub></span><span>${fmt(r.T_xy,4)} mm/s</span></div>
+        <div class="kv"><span>T<sub>sum</sub></span><span>${Number.isFinite(r.T_sum) ? fmt(r.T_sum,4)+' mm/s' : 'undefined'}</span></div>
+        <div class="kv"><span>ρ = T<sub>sum</sub>/T<sub>xy</sub></span><span>${rhoTxt}</span></div>
+      </div>
+    </div>`;
+
+  html += `<div class="chk"><div class="chk-title">Closure check</div>`;
+  if (noise.mode === 'assumed') {
+    html += `<div class="kv"><span>σ = σ<sub>dev</sub>/√k</span><span>${fmt(noise.sdev,3)}/√${noise.k} = ${fmt(noise.sigma,4)} mm/s</span></div>`;
+  } else if (noise.mode === 'estimated') {
+    html += `<div class="kv"><span>σ̂ = s<sub>p</sub>/√k (k = ${noise.k})</span><span>${fmt(noise.sigma,4)} mm/s, ν = ${noise.nu}</span></div>`;
+    html += `<div class="kv"><span>run means V<sub>0</sub>…V<sub>3</sub></span><span>${noise.V.map(v=>fmt(v,3)).join(', ')}</span></div>`;
+  }
+  if (Number.isFinite(chk.z)) {
+    html += `<div class="kv"><span>g = T²<sub>sum</sub> − T²<sub>xy</sub></span><span>${fmt(r.g,4)} (mm/s)²</span></div>`;
+    html += `<div class="kv"><span>z = g/u(g)</span><span>${fmt(chk.z,2)}</span></div>`;
+  }
+  html += decisionAlert(chk, noise) + `</div>`;
+
+  html += `<div class="chk"><div class="chk-title">Predicted uncertainty (95 %)</div>`;
+  if (chk.decision === 'flagged') {
+    html += `<div class="hint" style="margin:0">Not given for flagged data.</div>`;
+  } else if (Number.isFinite(chk.U95MRel)) {
+    html += `<div class="kv"><span>U<sub>95</sub>(m<sub>c</sub>)</span><span>± ${fmt(chk.U95MRel*r.mc, r.mc < 10 ? 3 : 1)} g (${fmt(100*chk.U95MRel,1)} %)</span></div>`;
+    html += `<div class="kv"><span>U<sub>95</sub>(θ)</span><span>± ${fmt(chk.U95ThetaDeg,1)}°</span></div>`;
+    html += `<div class="hint" style="margin:4px 0 0">Amplitude noise only (coverage factor ${noise.nu == null ? '1.96' : 't<sub>0.975,'+noise.nu+'</sub>'}); errors in the trial-weight mass or position are not included.</div>`;
+  } else {
+    html += `<div class="hint" style="margin:0">Requires a noise level.</div>`;
+  }
+  html += `</div>`;
+
+  document.getElementById('analBody').innerHTML = html;
+}
+
+function renderGraphical(gR, aR) {
+  document.getElementById('gfxWarns').innerHTML = gR.qualityWarn ? mkAlert(gR.qualityWarn) : '';
+  if (gR.ok) {
+    document.getElementById('gc-m').textContent = fmt(gR.mc,4);
+    document.getElementById('gc-a').textContent = fmt(gR.θ_d,3);
+    document.getElementById('gc-au').textContent = '°';
+    document.getElementById('gc-t').textContent = fmt(gR.T,5);
+    document.getElementById('gfxCards').style.display = 'grid';
+  }
+  renderComparison(aR, gR);
+  drawDiagram(gR);
+}
+
+function renderComparison(aR, gR) {
+  if (!aR.ok || !gR.ok) { document.getElementById('cmpSection').style.display = 'none'; return; }
+  document.getElementById('cmpSection').style.display = 'block';
+
+  const ΔT_abs = Math.abs(aR.T_xy - gR.T);
+  const ΔT_rel = ΔT_abs / aR.T_xy * 100;
+  const Δmc_abs = Math.abs(aR.mc - gR.mc);
+  const Δmc_rel = Δmc_abs / aR.mc * 100;
+  const Δθ_raw = Math.abs(mod360(aR.θ_d) - mod360(gR.θ_d));
+  const Δθ = Math.min(Δθ_raw, 360-Δθ_raw);
+
+  const TOL = 5.0;
+  const allAgree = ΔT_rel < TOL && Δmc_rel < TOL && Δθ < TOL;
+
+  const rows = [
+    {param: 'T', a: fmt(aR.T_xy,5), g: fmt(gR.T,5), dAbs: fmt(ΔT_abs,5), dRel: fmt(ΔT_rel,2)+'%', agree: ΔT_rel < TOL},
+    {param: 'm<sub>c</sub>', a: fmt(aR.mc,4), g: fmt(gR.mc,4), dAbs: fmt(Δmc_abs,4), dRel: fmt(Δmc_rel,2)+'%', agree: Δmc_rel < TOL},
+    {param: 'θ', a: fmt(aR.θ_d,3), g: fmt(gR.θ_d,3), dAbs: fmt(Δθ,3)+'°', dRel: '—', agree: Δθ < TOL}
+  ];
+
+  document.getElementById('cmpBody').innerHTML = rows.map(r => `
+    <tr>
+      <td><strong>${r.param}</strong></td>
+      <td class="val-a">${r.a}</td>
+      <td class="val-g">${r.g}</td>
+      <td class="val-d">${r.dAbs} <span style="color:var(--muted)">(${r.dRel})</span></td>
+      <td class="${r.agree?'agree':'disagree'}">${r.agree?'✓':'✗'}</td>
+    </tr>`).join('');
+
+  const badge = document.getElementById('cmpBadge');
+  badge.className = allAgree ? 'cmp-badge good' : 'cmp-badge bad';
+  badge.textContent = allAgree ? '✓' : '⚠';
+  badge.title = 'Agreement within 5 % (T, mass) and 5° (angle)';
+}
+
+/* ---------- canvas ---------- */
+const C = {
+  bg:'#f4f8ff', grid:'#dce8f5', axis:'#8aafd0',
+  ref:'#2563eb', refFill:'rgba(37,99,235,0.05)',
+  c0:'#dc2626', c1:'#16a34a', c2:'#ea580c',
+  corr:'#92400e', corrFill:'rgba(146,64,14,0.10)',
+  text:'#1e3a5f', dimText:'#5a7a9a'
+};
+const CCOLS = [C.c0, C.c1, C.c2];
+
+function drawDiagram(gR) {
+  if (!STATE) return;
+  const {A0,A1,A2,A3} = STATE;
+  const cvs = document.getElementById('cvs');
+  const box = cvs.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const W = box.width, H = box.height;
+  if (W < 20 || H < 20) return;
+  cvs.width = Math.round(W*dpr);
+  cvs.height = Math.round(H*dpr);
+  const ctx = cvs.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const maxW = Math.max(A0,A1,A2,A3)*1.22 + A0*0.3;
+  const scl = Math.min(W,H)/2/maxW*0.78;
+  const ox=W/2, oy=H/2;
+  const tx=x=>ox+x*scl, ty=y=>oy-y*scl;
+
+  ctx.fillStyle = C.bg; ctx.fillRect(0,0,W,H);
+
+  // Grid
+  const gs = Math.pow(10, Math.floor(Math.log10(maxW/4)));
+  ctx.strokeStyle = C.grid; ctx.lineWidth = 0.6;
+  for (let v = -maxW; v <= maxW; v += gs) {
+    ctx.beginPath(); ctx.moveTo(tx(v),0); ctx.lineTo(tx(v),H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,ty(v)); ctx.lineTo(W,ty(v)); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = C.axis; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(0,ty(0)); ctx.lineTo(W,ty(0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(tx(0),0); ctx.lineTo(tx(0),H); ctx.stroke();
+
+  // Labels
+  ctx.fillStyle = C.dimText; ctx.font = 'bold 12px JetBrains Mono,monospace';
+  ctx.textAlign='left'; ctx.fillText('+X →', W-48, ty(0)-6);
+  ctx.textAlign='center'; ctx.fillText('↑ +Y', tx(0)+24, 15);
+
+  // Scale bar
+  const sbL=gs*scl, sbX=12, sbY=H-14;
+  ctx.strokeStyle=C.axis; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(sbX,sbY); ctx.lineTo(sbX+sbL,sbY); ctx.stroke();
+  [sbX, sbX+sbL].forEach(x=>{ctx.beginPath();ctx.moveTo(x,sbY-3);ctx.lineTo(x,sbY+3);ctx.stroke();});
+  ctx.fillStyle=C.text; ctx.font='bold 10px JetBrains Mono,monospace'; ctx.textAlign='center';
+  ctx.fillText(`${gs<1?gs.toFixed(2):gs.toFixed(0)} mm/s`, sbX+sbL/2, sbY-6);
+
+  // Status
+  ctx.fillStyle=C.dimText; ctx.font='10px JetBrains Mono,monospace';
+  ctx.textAlign='right'; ctx.fillText(gR.intersectCase||'', W-7, H-5);
+
+  // Reference circle
+  ctx.strokeStyle = C.ref; ctx.lineWidth = 1.5; ctx.setLineDash([4,4]); ctx.globalAlpha=0.7;
+  ctx.beginPath(); ctx.arc(tx(0), ty(0), A0*scl, 0, Math.PI*2); ctx.stroke();
+  ctx.setLineDash([]); ctx.globalAlpha=1;
+
+  // Radial lines
+  [0,1,2].forEach(i=>{
+    const a = trialRad(i,DIR);
+    const L = A0*1.4;
+    ctx.strokeStyle=CCOLS[i]; ctx.lineWidth=0.7; ctx.setLineDash([4,4]); ctx.globalAlpha=0.6;
+    ctx.beginPath(); ctx.moveTo(tx(0),ty(0));
+    ctx.lineTo(tx(L*Math.cos(a)),ty(L*Math.sin(a))); ctx.stroke();
+    ctx.setLineDash([]); ctx.globalAlpha=1;
+    const ang=[0,120,240][i];
+    ctx.fillStyle=CCOLS[i]; ctx.font='bold 12px Barlow Condensed,sans-serif';
+    ctx.textAlign='center';
+    const lx=L*1.17*Math.cos(a), ly=L*1.17*Math.sin(a);
+    ctx.fillText(`α=${ang}°`, tx(lx), ty(ly)+4);
+  });
+
+  // Circles
+  gR.cen.forEach((c,i)=>{
+    ctx.strokeStyle = CCOLS[i]; ctx.lineWidth = 2.2; ctx.globalAlpha=0.90;
+    ctx.beginPath(); ctx.arc(tx(c.x), ty(c.y), gR.rad[i]*scl, 0, Math.PI*2); ctx.stroke();
+    ctx.globalAlpha=1;
+    ctx.fillStyle=CCOLS[i];
+    ctx.beginPath(); ctx.arc(tx(c.x), ty(c.y), 4.5, 0, Math.PI*2); ctx.fill();
+    ctx.font='bold 12px JetBrains Mono,monospace'; ctx.textAlign='center';
+    ctx.fillText(`O${i+1}`, tx(c.x), ty(c.y)-10);
+    ctx.globalAlpha=0.70; ctx.font='bold 10px JetBrains Mono,monospace';
+    const mid=trialRad(i,DIR)+Math.PI*0.18;
+    ctx.fillText(`r=${gR.rad[i].toFixed(2)}`, tx(c.x+gR.rad[i]*0.55*Math.cos(mid)), ty(c.y+gR.rad[i]*0.55*Math.sin(mid)));
+    ctx.globalAlpha=1;
+  });
+
+  // All pairwise intersections (light), then the retained point of each pair
+  gR.pairData.forEach(pd => pd.pts.forEach(p => {
+    ctx.fillStyle='rgba(148,163,184,0.45)'; ctx.strokeStyle='rgba(148,163,184,0.3)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(tx(p.x),ty(p.y),4,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  }));
+  gR.bestPerPair.forEach(b => {
+    ctx.lineWidth=2; ctx.strokeStyle='rgba(180,83,9,0.85)';
+    ctx.fillStyle = b.inter ? '#1e3a5f' : '#ffffff';
+    ctx.beginPath(); ctx.arc(tx(b.x),ty(b.y),6,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='rgba(30,58,95,0.75)'; ctx.font='bold 10px JetBrains Mono,monospace'; ctx.textAlign='left';
+    ctx.fillText(b.inter ? `ε=${b.residual.toFixed(3)}` : `foot, ε=${b.residual.toFixed(3)}`, tx(b.x)+8, ty(b.y)+3);
+  });
+
+  // Solution point P
+  if (gR.solPt && gR.ok) {
+    const spx=tx(gR.solPt.x), spy=ty(gR.solPt.y);
+    const dx=spx-tx(0), dy=spy-ty(0), len=Math.hypot(dx,dy);
+    const ux=dx/len, uy=dy/len;
+    ctx.strokeStyle=C.corr; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(tx(0),ty(0)); ctx.lineTo(spx,spy); ctx.stroke();
+    const head=10;
+    ctx.fillStyle=C.corr;
+    ctx.beginPath();
+    ctx.moveTo(spx,spy);
+    ctx.lineTo(spx-head*(ux+uy*0.4),spy-head*(uy-ux*0.4));
+    ctx.lineTo(spx-head*(ux-uy*0.4),spy-head*(uy+ux*0.4));
+    ctx.closePath(); ctx.fill();
+
+    ctx.globalAlpha=0.9;
+    ctx.fillStyle=C.corrFill; ctx.strokeStyle=C.corr; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(spx,spy,9,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle=C.corr;
+    ctx.beginPath(); ctx.arc(spx,spy,3.5,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha=1;
+
+    const θrad=Math.atan2(gR.solPt.y,gR.solPt.x);
+    const arcR=A0*scl*0.28;
+    ctx.strokeStyle=C.corr; ctx.lineWidth=1.3; ctx.setLineDash([3,3]);
+    ctx.beginPath();
+    if(θrad>=0) ctx.arc(tx(0),ty(0),arcR,0,-θrad,true);
+    else ctx.arc(tx(0),ty(0),arcR,0,-θrad,false);
+    ctx.stroke(); ctx.setLineDash([]);
+
+    const midA=θrad/2;
+    ctx.fillStyle=C.corr; ctx.font='bold 13px Barlow Condensed,sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(`θ=${fmt(gR.θ_d,1)}°`, tx(arcR*1.5*Math.cos(midA)), ty(arcR*1.5*Math.sin(midA))+4);
+
+    const px=spx+(spx>ox?12:-12);
+    ctx.fillStyle=C.corr; ctx.font='bold 12px Barlow Condensed,sans-serif';
+    ctx.textAlign=spx>ox?'left':'right';
+    ctx.fillText(`P | mc=${fmt(gR.mc,3)} g`, px, spy-10);
+    ctx.fillStyle='rgba(146,64,14,0.75)'; ctx.font='bold 10px JetBrains Mono,monospace';
+    ctx.fillText(`T=${fmt(gR.T,4)} mm/s`, px, spy+13);
+  }
+
+  // Origin
+  ctx.fillStyle='#334155'; ctx.strokeStyle='#f4f8ff'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(tx(0),ty(0),5,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle=C.text; ctx.font='bold 11px JetBrains Mono,monospace';
+  ctx.textAlign='left'; ctx.fillText('O', tx(0)+7, ty(0)-5);
+}
+
+/* ---------- report ---------- */
+const H2 = t => `<h2 style="font-family: 'Barlow Condensed', sans-serif; color: #102a4c; font-size: 1.15rem; margin: 0 0 8px 0; padding-bottom: 3px; border-bottom: 2px solid #d97706;">${t}</h2>`;
+const ROW = (k, v, extra='') => `<tr><td style="padding: 4px 5px; border-bottom: 1px solid #e2e8f0; font-weight: 600; width: 45%;">${k}</td><td style="padding: 4px 5px; border-bottom: 1px solid #e2e8f0; ${extra}">${v}</td></tr>`;
+const TBL = rows => `<table style="width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 0.80rem;">${rows}</table>`;
+
+function generateReport() {
+  if (!STATE || !STATE.aRes.ok) {
+    alert('Please compute results first.');
+    return;
+  }
+  const {V, mt, rt, rc, noise, aRes, gRes, chk} = STATE;
+  const eqName = esc(document.getElementById('eqName').value || 'Unknown');
+  const rotorMass = esc(document.getElementById('rotorMass').value || '—');
+  const rotorDiameter = esc(document.getElementById('rotorDiameter').value || '—');
+  const speed = esc(document.getElementById('speed').value || '—');
+  const foundation = esc(document.getElementById('foundation').value);
+  const vFinal = parseFloat(document.getElementById('vFinal').value);
+  const currentDate = new Date().toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
+
+  const sigmaTxt = noise.mode === 'assumed' ? `${fmt(noise.sigma,4)} mm/s (σ<sub>dev</sub> = ${fmt(noise.sdev,3)} mm/s, k = ${noise.k}; assumed)`
+                 : noise.mode === 'estimated' ? `${fmt(noise.sigma,4)} mm/s (estimated from k = ${noise.k} readings per run, ν = ${noise.nu})`
+                 : 'not given';
+  const decTxt = {'no inconsistency detected':'No inconsistency detected', 'flagged':'Flagged',
+                  'not assessable':'Not assessable', 'no noise':'Not run (no noise level)',
+                  'not computable':'Not computable'}[chk.decision] || chk.decision;
+  const crit = noise.nu == null ? '2' : fmt(chk.crit,3);
+  const showU = chk.decision !== 'flagged' && Number.isFinite(chk.U95MRel);
+
+  let html = `
+    <div style="font-family: 'Crimson Pro', Georgia, serif; font-size: 13px; line-height: 1.4;">
+      <div class="report-section">${H2('1. EQUIPMENT')}
+        ${TBL(ROW('Equipment:', eqName) + ROW('Rotor mass:', rotorMass+' kg') + ROW('Rotor diameter:', rotorDiameter+' mm')
+             + ROW('Operating speed:', speed+' r/min') + ROW('Supports:', foundation) + ROW('Date:', currentDate))}
+      </div>
+      <div class="report-section">${H2('2. MEASURED AMPLITUDES (1×, MEAN OF EACH RUN)')}
+        ${TBL(ROW('V<sub>0</sub> (no trial weight):', fmt(V[0],3)+' mm/s')
+             + ROW('V<sub>1</sub>, V<sub>2</sub>, V<sub>3</sub> (0°, 120°, 240° '+DIR+'):', V.slice(1).map(v=>fmt(v,3)).join(', ')+' mm/s')
+             + ROW('Trial weight:', `${fmt(mt,3)} g at r<sub>t</sub> = ${fmt(rt,1)} mm`)
+             + ROW('Noise of the averaged values σ:', sigmaTxt))}
+      </div>
+      <div class="report-section">${H2('3. CORRECTION')}
+        ${TBL(ROW('Analytical (T<sub>xy</sub>):', `${fmt(aRes.mc,4)} g at ${fmt(aRes.θ_d,2)}°`, 'color:#b91c1c; font-weight:700;')
+             + ROW('Correction radius r<sub>c</sub>:', fmt(rc,1)+' mm')
+             + ROW('Graphical:', `${fmt(gRes.mc,4)} g at ${fmt(gRes.θ_d,2)}° (${gRes.nPairsIntersect}/3 pairs intersect, spread ${fmt(gRes.spread,3)} mm/s)`)
+             + ROW('Angle convention:', 'from trial position 1, in the direction in which the trial weight was stepped'))}
+      </div>
+      <div class="report-section">${H2('4. DATA CONSISTENCY AND PRECISION')}
+        ${TBL(ROW('T<sub>xy</sub>, T<sub>sum</sub>:', `${fmt(aRes.T_xy,4)}, ${Number.isFinite(aRes.T_sum)?fmt(aRes.T_sum,4):'undefined'} mm/s`)
+             + ROW('ρ:', aRes.status === FR.STATUS.T2SUM_NEGATIVE ? 'undefined (T²sum < 0)' : fmt(aRes.rho,3))
+             + ROW('z (limit ±'+crit+'):', Number.isFinite(chk.z) ? fmt(chk.z,2) : '—')
+             + ROW('Closure check:', decTxt, 'font-weight:700;')
+             + ROW('U<sub>95</sub>(m<sub>c</sub>), U<sub>95</sub>(θ):', showU ? `± ${fmt(chk.U95MRel*aRes.mc, aRes.mc<10?3:1)} g (${fmt(100*chk.U95MRel,1)} %), ± ${fmt(chk.U95ThetaDeg,1)}°` : '—'))}
+        <div style="margin-top:6px; font-size:0.78rem; color:#475569;">U<sub>95</sub> covers amplitude noise only; errors in the trial-weight mass or position are not included.</div>
+      </div>
+      <div class="report-section">${H2('5. AFTER BALANCING')}
+        ${TBL(ROW('Residual amplitude:', Number.isFinite(vFinal) ? fmt(vFinal,3)+' mm/s' : '—')
+             + ROW('Reduction from V<sub>0</sub>:', Number.isFinite(vFinal) ? fmt(100*(1-vFinal/V[0]),1)+' %' : '—'))}
+        <div style="margin-top:6px; font-size:0.78rem; color:#475569;">The zones of ISO 20816-3 apply to broadband r.m.s. velocity on machines above 15 kW; the 1× amplitudes used for balancing are not assessed against them here.</div>
+      </div>
+      <div style="margin-top: 20px; padding-top: 10px; border-top: 2px solid #cbd5e1; font-size: 0.75rem; color: #64748b; text-align: center; line-height: 1.5;">
+        <div><strong>Four-Run Phase-Free Rotor Balancing Tool v${VERSION}</strong></div>
+        <div>Computational core: fourrun.js, https://github.com/buimhien/Four-run-Method (release v${VERSION})</div>
+        <div style="margin-top: 5px;">Report generated: ${currentDate}</div>
+        <div style="margin-top: 6px; font-size: 0.72rem;">
+          Copyright © Dr. BUI Minh-Hien  |  University of Science and Technology — The University of Danang, Vietnam  |  MIT licence
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('reportContent').innerHTML = html;
+  document.getElementById('reportModal').classList.add('active');
+}
+
+function closeReport() {
+  document.getElementById('reportModal').classList.remove('active');
+}
+
+document.getElementById('reportModal').addEventListener('click', function(e) {
+  if (e.target === this) closeReport();
+});
+
+document.getElementById('cvs').addEventListener('mousemove',function(e){
+  if(!STATE)return;
+  const {A0,A1,A2,A3}=STATE;
+  const r=this.getBoundingClientRect();
+  const W=r.width,H=r.height;
+  const maxW=Math.max(A0,A1,A2,A3)*1.22+A0*0.3;
+  const scl=Math.min(W,H)/2/maxW*0.78;
+  const mx=(e.clientX-r.left-W/2)/scl;
+  const my=-(e.clientY-r.top-H/2)/scl;
+  const tip=document.getElementById('cvs-tooltip');
+  tip.style.display='block';
+  tip.style.left=(e.clientX-r.left+11)+'px';
+  tip.style.top=(e.clientY-r.top-22)+'px';
+  const ang = DIR === 'CCW' ? Math.atan2(my,mx) : Math.atan2(-my,mx);
+  tip.textContent=`r=${Math.hypot(mx,my).toFixed(4)} mm/s | θ=${mod360(ang*R2D).toFixed(2)}°`;
+});
+document.getElementById('cvs').addEventListener('mouseleave',()=>{
+  document.getElementById('cvs-tooltip').style.display='none';
+});
+
+let rsTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(rsTimer);
+  rsTimer=setTimeout(()=>{ if(STATE) drawDiagram(STATE.gRes); },80);
+});
+
+window.addEventListener('load',()=>setTimeout(compute,200));
+</script>
+</body>
+</html>

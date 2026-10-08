@@ -1,0 +1,371 @@
+{
+ "seed": 20261003,
+ "N": 50000,
+ "k": 3,
+ "faults": [
+  "none",
+  "angle_one_5",
+  "angle_one_10",
+  "angle_one_15",
+  "angle_all_20",
+  "gain_one_5pct",
+  "gain_one_10pct",
+  "v0_drift_5pct"
+ ],
+ "results": {
+  "BRT": {
+   "0.10": {
+    "none": {
+     "detect": 0.0462,
+     "mean_em": 0.0030575448166276424,
+     "mean_et": -0.0025938923652528553,
+     "pass_rate": 1.0,
+     "pass_given_accepted": 1.0
+    },
+    "angle_one_5": {
+     "detect": 0.07662,
+     "mean_em": 3.02699664106351,
+     "mean_et": -2.0364219625219198,
+     "pass_rate": 0.9992,
+     "pass_given_accepted": 0.9999783404448873
+    },
+    "angle_one_10": {
+     "detect": 0.20022,
+     "mean_em": 6.270217967381624,
+     "mean_et": -4.326929355958923,
+     "pass_rate": 0.95376,
+     "pass_given_accepted": 0.9921978544099628
+    },
+    "angle_one_15": {
+     "detect": 0.47854,
+     "mean_em": 9.704277333609287,
+     "mean_et": -6.907506847796479,
+     "pass_rate": 0.55532,
+     "pass_given_accepted": 0.8167836459172324
+    },
+    "angle_all_20": {
+     "detect": 0.043,
+     "mean_em": 0.016404362887556038,
+     "mean_et": -19.99268828485561,
+     "pass_rate": 0.0,
+     "pass_given_accepted": 0.0
+    },
+    "gain_one_5pct": {
+     "detect": 0.19062,
+     "mean_em": -1.3771938719933519,
+     "mean_et": -0.15615855200365406,
+     "pass_rate": 1.0,
+     "pass_given_accepted": 1.0
+    },
+    "gain_one_10pct": {
+     "detect": 0.6045,
+     "mean_em": -2.6333907556293754,
+     "mean_et": -0.29527089916620425,
+     "pass_rate": 0.99996,
+     "pass_given_accepted": 0.9998988621997471
+    },
+    "v0_drift_5pct": {
+     "detect": 0.99808,
+     "mean_em": 10.26286331778968,
+     "mean_et": -0.0019826295588322757,
+     "pass_rate": 0.4562,
+     "pass_given_accepted": 1.0
+    }
+   },
+   "0.20": {
+    "none": {
+     "detect": 0.04328,
+     "mean_em": -0.005989134671263982,
+     "mean_et": -0.007092649941267528,
+     "pass_rate": 0.9839,
+     "pass_given_accepted": 0.9909482398193828
+    },
+    "angle_one_5": {
+     "detect": 0.05056,
+     "mean_em": 3.0732331320309134,
+     "mean_et": -2.0453898433419204,
+     "pass_rate": 0.9452,
+     "pass_given_accepted": 0.9624831479609033
+    },
+    "angle_one_10": {
+     "detect": 0.08024,
+     "mean_em": 6.289935920361779,
+     "mean_et": -4.350073706971408,
+     "pass_rate": 0.7976,
+     "pass_given_accepted": 0.8448073410454902
+    },
+    "angle_one_15": {
+     "detect": 0.14716,
+     "mean_em": 9.776839666845069,
+     "mean_et": -6.901622281733966,
+     "pass_rate": 0.4924,
+     "pass_given_accepted": 0.5681018713943999
+    },
+    "angle_all_20": {
+     "detect": 0.04488,
+     "mean_em": 0.01026493244410154,
+     "mean_et": -19.983572701671395,
+     "pass_rate": 0.0,
+     "pass_given_accepted": 0.0
+    },
+    "gain_one_5pct": {
+     "detect": 0.07774,
+     "mean_em": -1.3526635969324878,
+     "mean_et": -0.15540510260133705,
+     "pass_rate": 0.98336,
+     "pass_given_accepted": 0.9881812070348925
+    },
+    "gain_one_10pct": {
+     "detect": 0.18422,
+     "mean_em": -2.599950833144604,
+     "mean_et": -0.2988737889234957,
+     "pass_rate": 0.9697,
+     "pass_given_accepted": 0.9653583073867955
+    },
+    "v0_drift_5pct": {
+     "detect": 0.67016,
+     "mean_em": 10.253220474399251,
+     "mean_et": 0.009271744628007346,
+     "pass_rate": 0.4834,
+     "pass_given_accepted": 0.8423478049963619
+    }
+   }
+  },
+  "IBR": {
+   "0.10": {
+    "none": {
+     "detect": 0.04526,
+     "mean_em": 0.06784006142270947,
+     "mean_et": -0.01989204790103206,
+     "pass_rate": 0.96224,
+     "pass_given_accepted": 0.9683264553700484
+    },
+    "angle_one_5": {
+     "detect": 0.04594,
+     "mean_em": 3.0426267940623704,
+     "mean_et": -1.309505796370411,
+     "pass_rate": 0.9121,
+     "pass_given_accepted": 0.9195857702869841
+    },
+    "angle_one_10": {
+     "detect": 0.04556,
+     "mean_em": 6.556872306758179,
+     "mean_et": -2.820485753288477,
+     "pass_rate": 0.75208,
+     "pass_given_accepted": 0.7586647667742341
+    },
+    "angle_one_15": {
+     "detect": 0.04514,
+     "mean_em": 10.474215381700954,
+     "mean_et": -4.576015289594344,
+     "pass_rate": 0.47338,
+     "pass_given_accepted": 0.4731164778082651
+    },
+    "angle_all_20": {
+     "detect": 0.04518,
+     "mean_em": 0.04907961010916258,
+     "mean_et": -20.01206126981395,
+     "pass_rate": 0.0,
+     "pass_given_accepted": 0.0
+    },
+    "gain_one_5pct": {
+     "detect": 0.06058,
+     "mean_em": -0.6969929406094199,
+     "mean_et": -0.197738858586066,
+     "pass_rate": 0.96246,
+     "pass_given_accepted": 0.9688744118711545
+    },
+    "gain_one_10pct": {
+     "detect": 0.106,
+     "mean_em": -1.2691977265813115,
+     "mean_et": -0.3672404484893338,
+     "pass_rate": 0.95962,
+     "pass_given_accepted": 0.9629306487695749
+    },
+    "v0_drift_5pct": {
+     "detect": 0.45676,
+     "mean_em": 10.380753922811554,
+     "mean_et": -0.023264937170550493,
+     "pass_rate": 0.47814,
+     "pass_given_accepted": 0.653781017598115
+    }
+   },
+   "0.20": {
+    "none": {
+     "detect": 0.04214,
+     "mean_em": 0.19682580119818147,
+     "mean_et": -0.09051571464637853,
+     "pass_rate": 0.69678,
+     "pass_given_accepted": 0.7106257699455035
+    },
+    "angle_one_5": {
+     "detect": 0.04484,
+     "mean_em": 3.295477600679973,
+     "mean_et": -1.374394869275464,
+     "pass_rate": 0.65968,
+     "pass_given_accepted": 0.6727249884836048
+    },
+    "angle_one_10": {
+     "detect": 0.04362,
+     "mean_em": 6.7696093471948275,
+     "mean_et": -2.874124974894195,
+     "pass_rate": 0.5734,
+     "pass_given_accepted": 0.5830109370752211
+    },
+    "angle_one_15": {
+     "detect": 0.04236,
+     "mean_em": 10.661534036791824,
+     "mean_et": -4.624836086647533,
+     "pass_rate": 0.43858,
+     "pass_given_accepted": 0.4437784553694499
+    },
+    "angle_all_20": {
+     "detect": 0.04602,
+     "mean_em": 0.1281826343668596,
+     "mean_et": -20.011781055875982,
+     "pass_rate": 0.00406,
+     "pass_given_accepted": 0.004192960020126208
+    },
+    "gain_one_5pct": {
+     "detect": 0.04498,
+     "mean_em": -0.4624543441440602,
+     "mean_et": -0.2811362455974903,
+     "pass_rate": 0.69792,
+     "pass_given_accepted": 0.7109589327972189
+    },
+    "gain_one_10pct": {
+     "detect": 0.05626,
+     "mean_em": -1.1341079038664645,
+     "mean_et": -0.42255769412559535,
+     "pass_rate": 0.69902,
+     "pass_given_accepted": 0.7132472926865451
+    },
+    "v0_drift_5pct": {
+     "detect": 0.13598,
+     "mean_em": 10.591598767607497,
+     "mean_et": -0.10990617236736246,
+     "pass_rate": 0.47226,
+     "pass_given_accepted": 0.5221175435753802
+    }
+   }
+  },
+  "ICC": {
+   "0.10": {
+    "none": {
+     "detect": 0.04492,
+     "mean_em": 0.011576273286308338,
+     "mean_et": -0.002289881323963647,
+     "pass_rate": 0.99998,
+     "pass_given_accepted": 0.999979059345814
+    },
+    "angle_one_5": {
+     "detect": 0.25286,
+     "mean_em": 1.60992010634155,
+     "mean_et": -3.120730148503797,
+     "pass_rate": 0.9997,
+     "pass_given_accepted": 0.9995984688277967
+    },
+    "angle_one_10": {
+     "detect": 0.74074,
+     "mean_em": 2.9524557770713025,
+     "mean_et": -6.383552762725948,
+     "pass_rate": 0.99734,
+     "pass_given_accepted": 0.9935200185142328
+    },
+    "angle_one_15": {
+     "detect": 0.97224,
+     "mean_em": 3.968905235850454,
+     "mean_et": -9.777120675618582,
+     "pass_rate": 0.57952,
+     "pass_given_accepted": 0.5994236311239193
+    },
+    "angle_all_20": {
+     "detect": 0.04622,
+     "mean_em": 0.018893522354932614,
+     "mean_et": -19.996531119046576,
+     "pass_rate": 0.0,
+     "pass_given_accepted": 0.0
+    },
+    "gain_one_5pct": {
+     "detect": 0.06584,
+     "mean_em": -3.847209033552689,
+     "mean_et": 0.48458558918175615,
+     "pass_rate": 0.99846,
+     "pass_given_accepted": 0.9989937483942793
+    },
+    "gain_one_10pct": {
+     "detect": 0.12534,
+     "mean_em": -7.465878837883414,
+     "mean_et": 0.9401433500712821,
+     "pass_rate": 0.89598,
+     "pass_given_accepted": 0.9162646056753482
+    },
+    "v0_drift_5pct": {
+     "detect": 1.0,
+     "mean_em": 10.289360384382235,
+     "mean_et": 0.003095464046197805,
+     "pass_rate": 0.45892,
+     "pass_given_accepted": NaN
+    }
+   },
+   "0.20": {
+    "none": {
+     "detect": 0.04554,
+     "mean_em": 0.13149476107022862,
+     "mean_et": -0.008915890443304916,
+     "pass_rate": 0.9702,
+     "pass_given_accepted": 0.9724870607463906
+    },
+    "angle_one_5": {
+     "detect": 0.09734,
+     "mean_em": 1.6958380261033832,
+     "mean_et": -3.1267040667295385,
+     "pass_rate": 0.95034,
+     "pass_given_accepted": 0.9487736246205659
+    },
+    "angle_one_10": {
+     "detect": 0.25444,
+     "mean_em": 2.9814207311701715,
+     "mean_et": -6.389545004449955,
+     "pass_rate": 0.88862,
+     "pass_given_accepted": 0.8738934492193787
+    },
+    "angle_one_15": {
+     "detect": 0.48612,
+     "mean_em": 4.060433201364641,
+     "mean_et": -9.789071106076252,
+     "pass_rate": 0.4935,
+     "pass_given_accepted": 0.47960613372771854
+    },
+    "angle_all_20": {
+     "detect": 0.04654,
+     "mean_em": 0.08643039820691467,
+     "mean_et": -20.01862667898254,
+     "pass_rate": 0.0,
+     "pass_given_accepted": 0.0
+    },
+    "gain_one_5pct": {
+     "detect": 0.0503,
+     "mean_em": -3.753409779845875,
+     "mean_et": 0.4643933918074047,
+     "pass_rate": 0.93142,
+     "pass_given_accepted": 0.9371801621564705
+    },
+    "gain_one_10pct": {
+     "detect": 0.06588,
+     "mean_em": -7.435596728252335,
+     "mean_et": 0.9312794848589946,
+     "pass_rate": 0.72756,
+     "pass_given_accepted": 0.7446580739091337
+    },
+    "v0_drift_5pct": {
+     "detect": 0.967,
+     "mean_em": 10.361789889043465,
+     "mean_et": -0.008969972628322038,
+     "pass_rate": 0.48504,
+     "pass_given_accepted": 0.7836363636363637
+    }
+   }
+  }
+ }
+}

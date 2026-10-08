@@ -1,0 +1,52 @@
+{
+  "_note": "Published mean amplitudes (1x r.m.s. velocity, each the mean of k = 3 readings; only the means were recorded), mm/s. rc = rt in all three cases.",
+  "BRT": {
+    "name": "Dynamic balancing test rig",
+    "mass_kg": 2.0,
+    "speed_rpm": 2950,
+    "rt_mm": 90,
+    "mt_g": 0.5,
+    "V": [
+      6.8,
+      8.7,
+      9.6,
+      3.2
+    ],
+    "V_after": 0.74,
+    "power_kW": 0.75
+  },
+  "IBR": {
+    "name": "Inertia brake test rig",
+    "mass_kg": 200.0,
+    "speed_rpm": 1000,
+    "rt_mm": 300,
+    "mt_g": 40.0,
+    "V": [
+      2.9,
+      3.65,
+      4.58,
+      1.4
+    ],
+    "V_after": 0.3,
+    "power_kW": "<15",
+    "supports": "rigid, rolling-element bearings"
+  },
+  "ICC": {
+    "name": "Industrial cassava chopper",
+    "mass_kg": 1200.0,
+    "speed_rpm": 1050,
+    "rt_mm": 250,
+    "mt_g": 378.0,
+    "V": [
+      10.4,
+      8.7,
+      9.8,
+      12.9
+    ],
+    "V_after": 0.26,
+    "power_kW": 110,
+    "installed_angle_deg": 49.1,
+    "installed_mass_g": 1428.0,
+    "mass_note": "approximate mass of the rotating assembly"
+  }
+}
