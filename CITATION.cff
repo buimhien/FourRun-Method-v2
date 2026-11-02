@@ -10,5 +10,18 @@ authors:
     given-names: Duc-Hanh
   - family-names: Dang
     given-names: Phuoc-Vinh
-repository-code: "https://github.com/buimhien/4Run_V2"
-url: "https://buimhien.github.io/4Run_V2/"
+repository-code: "https://github.com/buimhien/FourRun-Method-v2"
+url: "https://buimhien.github.io/FourRun-Method-v2/"
+preferred-citation:
+  type: article
+  title: "Uncertainty and data consistency assessment for phase-free single-plane rigid rotor balancing: Monte Carlo analysis and three application case studies"
+  journal: "Safety and Reliability"
+  year: 2026
+  doi: "10.1080/09617353.2026.2756052"
+  authors:
+    - family-names: Bui
+      given-names: Minh-Hien
+    - family-names: Dinh
+      given-names: Duc-Hanh
+    - family-names: Dang
+      given-names: Phuoc-Vinh

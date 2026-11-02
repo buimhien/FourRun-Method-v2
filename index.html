@@ -725,7 +725,7 @@ const DEG = Math.PI/180, R2D = 180/Math.PI;
 const fmt = (x,d=3) => Number.isFinite(x) ? x.toFixed(d) : '—';
 const mod360 = x => ((x % 360) + 360) % 360;
 const FR = window.FourRun;
-const VERSION = '3.0';
+const VERSION = '2.0';
 const MIN_V_FACTOR = 5;           // amplitude condition: all V_i >= 5 sigma
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -1211,7 +1211,7 @@ function generateReport() {
       </div>
       <div style="margin-top: 20px; padding-top: 10px; border-top: 2px solid #cbd5e1; font-size: 0.75rem; color: #64748b; text-align: center; line-height: 1.5;">
         <div><strong>Four-Run Phase-Free Rotor Balancing Tool v${VERSION}</strong></div>
-        <div>Computational core: fourrun.js, https://github.com/buimhien/Four-run-Method (release v${VERSION})</div>
+        <div>Computational core: fourrun.js, https://github.com/buimhien/FourRun-Method-v2 (release v${VERSION})</div>
         <div style="margin-top: 5px;">Report generated: ${currentDate}</div>
         <div style="margin-top: 6px; font-size: 0.72rem;">
           Copyright © Dr. BUI Minh-Hien  |  University of Science and Technology — The University of Danang, Vietnam  |  MIT licence
